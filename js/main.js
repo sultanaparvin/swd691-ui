@@ -1,0 +1,7 @@
+function getAllUsers(){
+
+}
+
+function getUserById(){
+    
+}
