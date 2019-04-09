@@ -56,6 +56,7 @@ a:hover{
 .button:hover{
     background-color: transparent;
     color: #9b020e;
+    border: 2px solid #9b020e;
 }
 
 .intro{
@@ -92,4 +93,29 @@ a:hover{
 }
 .csw7{
     background-color: #bd000f;
+}
+.main-nav{
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+main{
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+header,
+footer{
+    background-color: #f8f9fa;
+}
+footer{
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+.copyright{
+    display: block;
+    text-align: center;
+}
+.view-user-add,
+.view-user-edit,
+.view-user-delete{
+    display: none;
 }

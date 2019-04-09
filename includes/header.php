@@ -13,11 +13,17 @@
 </head>
 <body>
     <header>
-        <nav>
-            <a href="projects.php">Project Management</a>
-            <a href="tests.php">Testcase Management</a>
-            <a href="users.php">User Management</a>
-            <a href="logout.php">Logout</a>
-        </nav>
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <ul class="nav main-nav">
+                        <li class="nav-item"><a class="nav-link" href="projects.php">Project Management</a></li>
+                        <li class="nav-item"><a class="nav-link" href="tests.php">Testcase Management</a></li>
+                        <li class="nav-item"><a class="nav-link" href="users.php">User Management</a></li>
+                        <li class="nav-item"><a class="nav-link" href="logout.php">Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </header>
     <main class="container">
