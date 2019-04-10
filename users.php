@@ -29,10 +29,10 @@
             </div>
             <div class="card w-100 view-user-addedit">
                 <div class="card-header">
-                    Users Add
+                    <span class="addedit-label"></span> User
                 </div>
                 <div class="card-body">
-                    <input type="hidden" class="user-id" id="user-id" value="">
+                    <input type="hidden" class="field-user-id" id="field-user-id" value="">
                     <div class="form-group">
                         <label for="field-user-name">Name</label>
                         <input type="text" class="form-control field-user-name" id="field-user-name" name="field-user-name">

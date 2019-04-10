@@ -1,5 +1,37 @@
 var endpoint = 'http://localhost/swd691-service-layers/';
 
+//Init all the user functionalities and call various functions
+function initUsers(){
+    userLoadList();
+    userLoadPrivileges();
+    $(document).on('click','.user-add-button',function(){
+        $('.addedit-label').html('Add');
+        $('.view-user-list').slideUp();
+        $('.view-user-addedit').slideDown();
+    });
+    $(document).on('click','.user-edit-button',function(){
+        $('.addedit-label').html('Edit');
+        //Get the item id 
+        var id = $(this).parents('tr').data('id');
+        populateEditFormById(id);
+        $('.view-user-list').slideUp();
+        $('.view-user-addedit').slideDown();
+    });
+    $(document).on('click','.user-delete-button',function(){
+        console.log('del');
+    });
+    $(document).on('click','.user-save-button',function(){ 
+        //This function is being used both for add & edit
+        userSaveAddEditForm();
+    });
+    $(document).on('click','.user-back-button',function(){
+        userResetForm();
+        $('.view-user-addedit').slideUp();
+        $('.view-user-list').slideDown();
+    });
+}
+
+//gets the user list and load the user table
 function userLoadList(){
     $.ajax({
         url : endpoint+'?action=users&subaction=getall',
@@ -24,6 +56,7 @@ function userLoadList(){
     })
 }
 
+//Get the user privileges and populate the privilege dropdown
 function userLoadPrivileges(){
     $.ajax({
         url : endpoint+'?action=users&subaction=getAllPrivileges',
@@ -42,30 +75,6 @@ function userLoadPrivileges(){
     });
 }
 
-function initUsers(){
-    userLoadList();
-    userLoadPrivileges();
-    $(document).on('click','.user-add-button',function(){
-        $('.view-user-list').slideUp();
-        $('.view-user-addedit').slideDown();
-    });
-    $(document).on('click','.user-edit-button',function(){
-        console.log('editg');
-    });
-    $(document).on('click','.user-delete-button',function(){
-        console.log('del');
-    });
-    $(document).on('click','.user-save-button',function(){ 
-        //This function is being used both for add & edit
-        userSaveAddEditForm();
-    });
-    $(document).on('click','.user-back-button',function(){
-        userResetForm();
-        $('.view-user-addedit').slideUp();
-        $('.view-user-list').slideDown();
-    });
-}
-
 //Handle user form save
 function userSaveAddEditForm(){
     var action = 'users';
@@ -80,6 +89,8 @@ function userSaveAddEditForm(){
     }else{
         var subaction = 'add';
     }
+    console.log(id);
+    console.log(subaction);
     var data= {
         'action': action,
         'subaction' : subaction,
@@ -120,6 +131,25 @@ function userSaveAddEditForm(){
             }
         }
     });
+}
+
+function populateEditFormById(id){
+    $.ajax({
+        url : endpoint+'?action=users&subaction=getbyid&id='+id,
+        method: 'GET'
+    }).done(function(response){
+        if(response != undefined){
+            response = JSON.parse(response);
+            if(response.success == true){
+                $('.field-user-id').val(id);
+                $('.field-user-name').val(response.item.name);
+                $('.field-user-username').val(response.item.username);
+                $('.field-user-password').val('');
+                $('.field-user-email').val(response.item.email);
+                $('.field-user-privilege').val(response.item.privilege);
+            }
+        }
+    })
 }
 
 //Reset user form field values
