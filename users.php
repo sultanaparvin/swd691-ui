@@ -1,15 +1,15 @@
 <?php 
     require_once('includes/header.php');
 ?>
-    <div class="row view-user-list">
-        <div class="col-xs-12">
-            <div class="card">
+    <div class="row">
+        <div class="col col-xs-12">
+            <div class="messages-wrap mb-2 w-100"></div>
+            <div class=" w-100 view-user-list">
                 <div class="card-header">
                     Users List
                 </div>
 
                 <div class="card-body">
-                    <div class="messages-wrap"></div>
                     <span class="btn btn-primary button user-add-button mb-2">Add</span>
                     <table class="table table-bordered user-list-table">
                         <thead>
@@ -27,11 +27,7 @@
                     </table>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="row view-user-addedit">
-        <div class="col-xs-12">
-            <div class="card">
+            <div class="card w-100 view-user-addedit">
                 <div class="card-header">
                     Users Add
                 </div>
@@ -58,7 +54,8 @@
                         <select class="form-control field-user-privilege" id="field-user-privilege" name="field-user-privilege">
                         </select>
                     </div>
-                    <span class="btn btn-primary button user-save-button mt-2 mb-2">Save</span>
+                    <span class="btn btn-primary button user-save-button mt-2 mb-2">Save</span>&nbsp;&nbsp;
+                    <span class="btn btn-primary button user-back-button mt-2 mb-2">Back</span>
                 </div>
             </div>
         </div>

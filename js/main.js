@@ -58,11 +58,15 @@ function initUsers(){
     $(document).on('click','.user-save-button',function(){ 
         //This function is being used both for add & edit
         userSaveAddEditForm();
+    });
+    $(document).on('click','.user-back-button',function(){
+        userResetForm();
         $('.view-user-addedit').slideUp();
         $('.view-user-list').slideDown();
     });
 }
 
+//Handle user form save
 function userSaveAddEditForm(){
     var action = 'users';
     var id = $('.field-user-id').val();
@@ -107,10 +111,24 @@ function userSaveAddEditForm(){
             if(response.success == true){
                 var messages = [response.message];
                 ShowMessages(messages, 'success');
+                userResetForm();
                 userLoadList();
+                $('.view-user-addedit').slideUp();
+                $('.view-user-list').slideDown();
+            }else{
+                ShowMessages(response.message, 'fail');
             }
         }
     });
+}
+
+//Reset user form field values
+function userResetForm(){
+    $('.field-user-id').val('');
+    $('.field-user-name').val('');
+    $('.field-user-username').val('');
+    $('.field-user-password').val('');
+    $('.field-user-email').val('');
 }
 
 //Show success and fail messages
@@ -122,11 +140,12 @@ function ShowMessages(messages, type){
     }
     var output = '';
     for(var i =0; i<messages.length; i++){
-        output = messages[i]+'<br>';
+        output += messages[i]+'<br>';
     }
-    $('.messages-wrap').html('<div class="'+className+'">'+output+'</div>');
+    $('.messages-wrap').html('');
+    $('.messages-wrap').html('<div class="w-100 '+className+'">'+output+'</div>');
     var messageTimer = setTimeout(function(){ 
-        $('.messages-wrap').html(''); 
+        $('.messages-wrap').html('');
         clearTimeout(messageTimer);
     }, 4000);
     
