@@ -7,8 +7,10 @@
                 <div class="card-header">
                     Users List
                 </div>
+
                 <div class="card-body">
-                <span class="btn btn-primary button user-add-button mb-2">Add</span>
+                    <div class="messages-wrap"></div>
+                    <span class="btn btn-primary button user-add-button mb-2">Add</span>
                     <table class="table table-bordered user-list-table">
                         <thead>
                             <tr>
@@ -27,13 +29,14 @@
             </div>
         </div>
     </div>
-    <div class="row view-user-add">
+    <div class="row view-user-addedit">
         <div class="col-xs-12">
             <div class="card">
                 <div class="card-header">
                     Users Add
                 </div>
                 <div class="card-body">
+                    <input type="hidden" class="user-id" id="user-id" value="">
                     <div class="form-group">
                         <label for="field-user-name">Name</label>
                         <input type="text" class="form-control field-user-name" id="field-user-name" name="field-user-name">
@@ -55,6 +58,7 @@
                         <select class="form-control field-user-privilege" id="field-user-privilege" name="field-user-privilege">
                         </select>
                     </div>
+                    <span class="btn btn-primary button user-save-button mt-2 mb-2">Save</span>
                 </div>
             </div>
         </div>

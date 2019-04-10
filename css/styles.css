@@ -114,8 +114,7 @@ footer{
     display: block;
     text-align: center;
 }
-.view-user-add,
-.view-user-edit,
+.view-user-addedit,
 .view-user-delete{
     display: none;
 }

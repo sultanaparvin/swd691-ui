@@ -1,6 +1,6 @@
 var endpoint = 'http://localhost/swd691-service-layers/';
 
-function loadUsersList(){
+function userLoadList(){
     $.ajax({
         url : endpoint+'?action=users&subaction=getall',
         method: 'GET'
@@ -8,6 +8,7 @@ function loadUsersList(){
         if(response != undefined){
             response = JSON.parse(response);
             if(response.success == true){
+                $('.user-list-table tbody').html('');
                 for(var i=0; i< response.items.length; i++){
                     var item = response.items[i];
                     var id = item.id;
@@ -23,7 +24,7 @@ function loadUsersList(){
     })
 }
 
-function loadUserPrivileges(){
+function userLoadPrivileges(){
     $.ajax({
         url : endpoint+'?action=users&subaction=getAllPrivileges',
         method: 'GET'
@@ -42,11 +43,11 @@ function loadUserPrivileges(){
 }
 
 function initUsers(){
-    loadUsersList();
-    loadUserPrivileges();
+    userLoadList();
+    userLoadPrivileges();
     $(document).on('click','.user-add-button',function(){
         $('.view-user-list').slideUp();
-        $('.view-user-add').slideDown();
+        $('.view-user-addedit').slideDown();
     });
     $(document).on('click','.user-edit-button',function(){
         console.log('editg');
@@ -54,11 +55,79 @@ function initUsers(){
     $(document).on('click','.user-delete-button',function(){
         console.log('del');
     });
+    $(document).on('click','.user-save-button',function(){ 
+        //This function is being used both for add & edit
+        userSaveAddEditForm();
+        $('.view-user-addedit').slideUp();
+        $('.view-user-list').slideDown();
+    });
 }
-function getAllUsers(){
+
+function userSaveAddEditForm(){
+    var action = 'users';
+    var id = $('.field-user-id').val();
+    var name = $('.field-user-name').val();
+    var username = $('.field-user-username').val();
+    var password = $('.field-user-password').val();
+    var email = $('.field-user-email').val();
+    var privilege = $('.field-user-privilege').children('option:selected').val();
+    if(id != '' && id!=undefined && id!=null){
+        var subaction = 'edit';
+    }else{
+        var subaction = 'add';
+    }
+    var data= {
+        'action': action,
+        'subaction' : subaction,
+        'id' : id,
+        'name' : name,
+        'username': username,
+        'password': password,
+        'email': email,
+        'privilege': privilege
+    };
+    console.log(data);
+    //Save the data
+    $.ajax({
+        url : endpoint,
+        method: 'POST',
+        data: {
+            'action': action,
+            'subaction' : subaction,
+            'id' : id,
+            'name' : name,
+            'username': username,
+            'password': password,
+            'email': email,
+            'privilege': privilege
+        }
+    }).done(function(response){
+        if(response != undefined){
+            response = JSON.parse(response);
+            if(response.success == true){
+                var messages = [response.message];
+                ShowMessages(messages, 'success');
+                userLoadList();
+            }
+        }
+    });
+}
+
+//Show success and fail messages
+function ShowMessages(messages, type){
+    if(type=='success'){
+        var className ='alert alert-success';
+    }else{
+        var className ='alert alert-danger';
+    }
+    var output = '';
+    for(var i =0; i<messages.length; i++){
+        output = messages[i]+'<br>';
+    }
+    $('.messages-wrap').html('<div class="'+className+'">'+output+'</div>');
+    var messageTimer = setTimeout(function(){ 
+        $('.messages-wrap').html(''); 
+        clearTimeout(messageTimer);
+    }, 4000);
     
-}
-
-function getUserById(){
-
 }
