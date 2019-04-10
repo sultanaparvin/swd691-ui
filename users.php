@@ -3,6 +3,7 @@
 ?>
     <div class="row">
         <div class="col col-xs-12">
+            <input type="hidden" class="field-user-id" id="field-user-id" value="">        
             <div class="messages-wrap mb-2 w-100"></div>
             <div class=" w-100 view-user-list">
                 <div class="card-header">
@@ -32,7 +33,6 @@
                     <span class="addedit-label"></span> User
                 </div>
                 <div class="card-body">
-                    <input type="hidden" class="field-user-id" id="field-user-id" value="">
                     <div class="form-group">
                         <label for="field-user-name">Name</label>
                         <input type="text" class="form-control field-user-name" id="field-user-name" name="field-user-name">
@@ -56,6 +56,16 @@
                     </div>
                     <span class="btn btn-primary button user-save-button mt-2 mb-2">Save</span>&nbsp;&nbsp;
                     <span class="btn btn-primary button user-back-button mt-2 mb-2">Back</span>
+                </div>
+            </div>
+            <div class="card w-100 view-user-delete">
+                <div class="card-header">
+                    Delete User
+                </div>
+                <div class="card-body">
+                    Are you sure you want to delete this user?<br>
+                    <span class="btn btn-primary button user-delete-yes-button mt-2 mb-2">Yes</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <span class="btn btn-primary button user-delete-no-button mt-2 mb-2">No</span>
                 </div>
             </div>
         </div>

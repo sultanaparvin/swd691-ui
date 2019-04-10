@@ -14,11 +14,16 @@ function initUsers(){
         //Get the item id 
         var id = $(this).parents('tr').data('id');
         populateEditFormById(id);
+        $('.field-user-id').val(id);
         $('.view-user-list').slideUp();
         $('.view-user-addedit').slideDown();
     });
     $(document).on('click','.user-delete-button',function(){
-        console.log('del');
+        //Get the item id 
+        var id = $(this).parents('tr').data('id');
+        $('.field-user-id').val(id);
+        $('.view-user-list').slideUp();
+        $('.view-user-delete').slideDown();
     });
     $(document).on('click','.user-save-button',function(){ 
         //This function is being used both for add & edit
@@ -27,6 +32,15 @@ function initUsers(){
     $(document).on('click','.user-back-button',function(){
         userResetForm();
         $('.view-user-addedit').slideUp();
+        $('.view-user-list').slideDown();
+    });
+    $(document).on('click','.user-delete-yes-button',function(){
+        var id = $('.field-user-id').val();
+        userDelete(id);
+    });
+    $(document).on('click','.user-delete-no-button',function(){
+        userResetForm();
+        $('.view-user-delete').slideUp();
         $('.view-user-list').slideDown();
     });
 }
@@ -133,6 +147,7 @@ function userSaveAddEditForm(){
     });
 }
 
+//populate the edit form
 function populateEditFormById(id){
     $.ajax({
         url : endpoint+'?action=users&subaction=getbyid&id='+id,
@@ -141,7 +156,6 @@ function populateEditFormById(id){
         if(response != undefined){
             response = JSON.parse(response);
             if(response.success == true){
-                $('.field-user-id').val(id);
                 $('.field-user-name').val(response.item.name);
                 $('.field-user-username').val(response.item.username);
                 $('.field-user-password').val('');
@@ -150,6 +164,33 @@ function populateEditFormById(id){
             }
         }
     })
+}
+
+//Delete user by id
+function userDelete(id){
+    $.ajax({
+        url : endpoint,
+        method: 'POST',
+        data: {
+            'action': 'users',
+            'subaction' : 'delete',
+            'id' : id,
+        }
+    }).done(function(response){
+        if(response != undefined){
+            response = JSON.parse(response);
+            if(response.success == true){
+                var messages = [response.message];
+                ShowMessages(messages, 'success');
+                userResetForm();
+                userLoadList();
+            }else{
+                ShowMessages(response.message, 'fail');
+            }
+        }
+    });
+    $('.view-user-delete').slideUp();
+    $('.view-user-list').slideDown();
 }
 
 //Reset user form field values
