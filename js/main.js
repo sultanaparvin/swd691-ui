@@ -1,5 +1,5 @@
 var endpoint = 'http://localhost/swd691-service-layers/';
-
+/************************************************************************USERS */
 //Init all the user functionalities and call various functions
 function initUsers(){
     userLoadList();
@@ -13,7 +13,7 @@ function initUsers(){
         $('.addedit-label').html('Edit');
         //Get the item id 
         var id = $(this).parents('tr').data('id');
-        populateEditFormById(id);
+        userPopulateEditFormById(id);
         $('.field-user-id').val(id);
         $('.view-user-list').slideUp();
         $('.view-user-addedit').slideDown();
@@ -147,8 +147,8 @@ function userSaveAddEditForm(){
     });
 }
 
-//populate the edit form
-function populateEditFormById(id){
+//populate the user edit form
+function userPopulateEditFormById(id){
     $.ajax({
         url : endpoint+'?action=users&subaction=getbyid&id='+id,
         method: 'GET'
@@ -202,6 +202,72 @@ function userResetForm(){
     $('.field-user-email').val('');
 }
 
+/************************************************************************PROJECTS */
+//Init all the project functionalities and call various functions
+function initProject(){
+    projectLoadList();
+    $(document).on('click','.project-add-button',function(){
+        $('.addedit-label').html('Add');
+        $('.view-project-list').slideUp();
+        $('.view-project-addedit').slideDown();
+    });
+    $(document).on('click','.project-edit-button',function(){
+        $('.addedit-label').html('Edit');
+        //Get the item id 
+        var id = $(this).parents('tr').data('id');
+        projectPopulateEditFormById(id);
+        $('.field-project-id').val(id);
+        $('.view-project-list').slideUp();
+        $('.view-project-addedit').slideDown();
+    });
+    $(document).on('click','.project-delete-button',function(){
+        //Get the item id 
+        var id = $(this).parents('tr').data('id');
+        $('.field-project-id').val(id);
+        $('.view-project-list').slideUp();
+        $('.view-project-delete').slideDown();
+    });
+    $(document).on('click','.project-save-button',function(){ 
+        //This function is being used both for add & edit
+        projectSaveAddEditForm();
+    });
+    $(document).on('click','.project-back-button',function(){
+        projectResetForm();
+        $('.view-project-addedit').slideUp();
+        $('.view-project-list').slideDown();
+    });
+    $(document).on('click','.project-delete-yes-button',function(){
+        var id = $('.field-project-id').val();
+        projectDelete(id);
+    });
+    $(document).on('click','.project-delete-no-button',function(){
+        projectResetForm();
+        $('.view-project-delete').slideUp();
+        $('.view-project-list').slideDown();
+    });
+}
+
+
+function projectLoadList(){
+
+}
+
+function projectPopulateEditFormById{
+
+}
+
+function projectSaveAddEditForm(){
+
+}
+
+function projectResetForm(){
+
+}
+
+function projectDelete(){
+
+}
+/************************************************************************GLOBAL */
 //Show success and fail messages
 function ShowMessages(messages, type){
     if(type=='success'){
