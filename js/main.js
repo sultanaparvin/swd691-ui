@@ -248,11 +248,30 @@ function initProject(){
 }
 
 
+//gets the projects list and load the projects table
 function projectLoadList(){
-
+    $.ajax({
+        url : endpoint+'?action=projects&subaction=getall',
+        method: 'GET'
+    }).done(function(response){
+        if(response != undefined){
+            response = JSON.parse(response);
+            if(response.success == true){
+                $('.project-list-table tbody').html('');
+                for(var i=0; i< response.items.length; i++){
+                    var item = response.items[i];
+                    var id = item.id;
+                    var name = item.name;
+                    var description = item.description;
+                    var row = '<tr data-id="'+id+'"><td>'+id+'</td><td>'+name+'</td><td>'+description+'</td><td><span class="btn btn-primary button project-edit-button">Edit</span></td><td><span class="btn btn-primary button project-delete-button">Delete</span></td></tr>';
+                    $('.project-list-table tbody').append(row);
+                }
+            }
+        }
+    })
 }
 
-function projectPopulateEditFormById{
+function projectPopulateEditFormById(){
 
 }
 
