@@ -271,9 +271,22 @@ function projectLoadList(){
     })
 }
 
-function projectPopulateEditFormById(){
-
+//populate the project edit form
+function projectPopulateEditFormById(id){
+    $.ajax({
+        url : endpoint+'?action=projects&subaction=getbyid&id='+id,
+        method: 'GET'
+    }).done(function(response){
+        if(response != undefined){
+            response = JSON.parse(response);
+            if(response.success == true){
+                $('.field-project-name').val(response.item.name);
+                $('.field-project-description').val(response.item.description);
+            }
+        }
+    })
 }
+
 
 function projectSaveAddEditForm(){
 
