@@ -247,7 +247,6 @@ function initProject(){
     });
 }
 
-
 //gets the projects list and load the projects table
 function projectLoadList(){
     $.ajax({
@@ -287,13 +286,57 @@ function projectPopulateEditFormById(id){
     })
 }
 
-
+//Handle project form save
 function projectSaveAddEditForm(){
-
+    var action = 'projects';
+    var id = $('.field-project-id').val();
+    var name = $('.field-project-name').val();
+    var description = $('.field-project-description').val();
+    if(id != '' && id!=undefined && id!=null){
+        var subaction = 'edit';
+    }else{
+        var subaction = 'add';
+    }
+    var data= {
+        'action': action,
+        'subaction' : subaction,
+        'id' : id,
+        'name' : name,
+        'description': description
+    };
+    //Save the data
+    $.ajax({
+        url : endpoint,
+        method: 'POST',
+        data: {
+            'action': action,
+            'subaction' : subaction,
+            'id' : id,
+            'name' : name,
+            'description': description,
+        }
+    }).done(function(response){
+        if(response != undefined){
+            response = JSON.parse(response);
+            if(response.success == true){
+                var messages = [response.message];
+                ShowMessages(messages, 'success');
+                projectResetForm();
+                projectLoadList();
+                $('.view-project-addedit').slideUp();
+                $('.view-project-list').slideDown();
+            }else{
+                ShowMessages(response.message, 'fail');
+            }
+        }
+    });
 }
 
+//reset the value of all form fields on project form
 function projectResetForm(){
-
+    $('.field-project-id').val('');
+    $('.field-project-name').val('');
+    $('.field-project-description').val('');
 }
 
 function projectDelete(){
