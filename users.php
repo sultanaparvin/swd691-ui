@@ -5,7 +5,7 @@
         <div class="col col-xs-12">
             <input type="hidden" class="field-user-id" id="field-user-id" value="">        
             <div class="messages-wrap mb-2 w-100"></div>
-            <div class=" w-100 view-user-list">
+            <div class="card w-100 view-user-list">
                 <div class="card-header">
                     Users List
                 </div>

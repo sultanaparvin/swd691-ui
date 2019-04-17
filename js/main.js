@@ -1,4 +1,31 @@
 var endpoint = 'http://localhost/swd691-service-layers/';
+/************************************************************************LOGIN/LOGOUT */
+//Init login/logout functionalities
+function initLogin(){
+    $(document).on('click','.login-button',function(){
+        var username = $('.field-login-username').val();
+        var password = $('.field-login-password').val();
+        var data= {
+            'action': 'login',
+            'username' : username,
+            'password' : password,
+        };
+        $.ajax({
+            url : endpoint,
+            method: 'POST',
+            data: data
+        }).done(function(response){
+            if(response != undefined){
+                response = JSON.parse(response);
+                if(response.success == true){
+                    redirect('dashboard.php');
+                }else{
+                    ShowMessages(response.message, 'fail');
+                }
+            }
+        });
+    });
+}
 /************************************************************************USERS */
 //Init all the user functionalities and call various functions
 function initUsers(){
@@ -384,4 +411,9 @@ function ShowMessages(messages, type){
         clearTimeout(messageTimer);
     }, 4000);
     
+}
+
+//Redirect the user to a new page
+function redirect(destination){
+    window.location.replace(window.location+destination);
 }
