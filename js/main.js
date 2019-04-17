@@ -339,8 +339,31 @@ function projectResetForm(){
     $('.field-project-description').val('');
 }
 
-function projectDelete(){
-
+//delete project by id
+function projectDelete(id){
+    $.ajax({
+        url : endpoint,
+        method: 'POST',
+        data: {
+            'action': 'projects',
+            'subaction' : 'delete',
+            'id' : id,
+        }
+    }).done(function(response){
+        if(response != undefined){
+            response = JSON.parse(response);
+            if(response.success == true){
+                var messages = [response.message];
+                ShowMessages(messages, 'success');
+                projectResetForm();
+                projectLoadList();
+            }else{
+                ShowMessages(response.message, 'fail');
+            }
+        }
+    });
+    $('.view-project-delete').slideUp();
+    $('.view-project-list').slideDown()
 }
 /************************************************************************GLOBAL */
 //Show success and fail messages
