@@ -22,9 +22,9 @@
             <div class="row">
                 <div class="col-xs-12">
                     <ul class="nav main-nav">
-                        <li class="nav-item"><a class="nav-link" href="projects.php">Project Management</a></li>
-                        <li class="nav-item"><a class="nav-link" href="tests.php">Testcase Management</a></li>
-                        <li class="nav-item"><a class="nav-link" href="users.php">User Management</a></li>
+                        <li class="nav-item"><a class="nav-link permission-link perm-Manager" href="projects.php">Project Management</a></li>
+                        <li class="nav-item"><a class="nav-link permission-link perm-Manager  perm-Tester  perm-Developer" href="tests.php">Testcase Management</a></li>
+                        <li class="nav-item"><a class="nav-link permission-link perm-Manager" href="users.php">User Management</a></li>
                         <li class="nav-item"><a class="nav-link" href="logout.php">Logout</a></li>
                     </ul>
                 </div>

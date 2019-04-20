@@ -455,7 +455,6 @@ function applyPermissions(){
                 'action': 'getuser',
             }
         }).done(function(response){
-            console.log(response);
             if(response != undefined){
                 response = JSON.parse(response);
                 if(response.success == true){
@@ -473,5 +472,11 @@ function applyPermissions(){
 
 //Hide sections based on user permissions
 function hideSectionsBasedOnPermission(){
-    console.log(currentLoggedInUser);
+    currentUserPermission = currentLoggedInUser.privilege;
+    $('.permission-link').hide(); //Hide all navigation links by default
+    $('.permission-link').each(function(){ //Show proper sections based on the permission
+        if($(this).hasClass('perm-'+currentUserPermission)){
+            $(this).show();
+        }
+    });
 }
