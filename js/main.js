@@ -1,4 +1,5 @@
 var endpoint = 'http://localhost/swd691-service-layers/';
+var currentLoggedInUser = '';
 /************************************************************************LOGIN/LOGOUT */
 //Init login/logout functionalities
 function initLogin(){
@@ -24,6 +25,25 @@ function initLogin(){
                 }
             }
         });
+    });
+}
+
+function initLogout(){
+    $.ajax({
+        url : endpoint,
+        method: 'GET',
+        data: {
+            'action':'logout'
+        }
+    }).done(function(response){
+        if(response != undefined){
+            response = JSON.parse(response);
+            if(response.success == true){
+                redirect('index.php');
+            }else{
+                ShowMessages(response.message, 'fail');
+            }
+        }
     });
 }
 /************************************************************************USERS */
@@ -108,7 +128,7 @@ function userLoadPrivileges(){
             if(response.success == true){
                 for(var i=0; i< response.items.length; i++){
                     var item = response.items[i];
-                    console.log(item);
+                    //console.log(item);
                     $('.field-user-privilege').append('<option value="'+item+'">'+item+'</option>');
                 }
             }
@@ -415,5 +435,43 @@ function ShowMessages(messages, type){
 
 //Redirect the user to a new page
 function redirect(destination){
-    window.location.replace(window.location+destination);
+    var origin = window.location.origin; //Domain
+    var hrefArray = window.location.href.split('/');
+    if(hrefArray['3']!=''){
+        var domain = origin+'/'+hrefArray['3'];
+    }else{
+        var domain = origin;
+    }
+    window.location.replace(domain+'/'+destination);
+}
+
+//Get the current user permissions and based on that hide/show certain features
+function applyPermissions(){
+    if(currentLoggedInUser == ''){//If permission doesn't exist, make ajax request and get it from API
+        $.ajax({
+            url : endpoint,
+            method: 'GET',
+            data: {
+                'action': 'getuser',
+            }
+        }).done(function(response){
+            console.log(response);
+            if(response != undefined){
+                response = JSON.parse(response);
+                if(response.success == true){
+                    currentLoggedInUser = response.user;
+                    hideSectionsBasedOnPermission();
+                }else{ // User is not logged in. Redirect to login page
+                    redirect('index.php');
+                }
+            }
+        });
+    }else{
+        hideSectionsBasedOnPermission();
+    }
+}
+
+//Hide sections based on user permissions
+function hideSectionsBasedOnPermission(){
+    console.log(currentLoggedInUser);
 }

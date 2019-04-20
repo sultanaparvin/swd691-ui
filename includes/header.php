@@ -10,6 +10,11 @@
     <link rel="stylesheet" type="text/css" media="screen" href="css/styles.css" />
     <script src="js/jquery-3.3.1.min.js"></script>
     <script src="js/main.js"></script>
+    <script>
+        $(document).ready(function(){
+            applyPermissions();
+        });
+    </script>
 </head>
 <body>
     <header>
