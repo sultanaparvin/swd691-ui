@@ -117,6 +117,7 @@ footer{
 .view-user-addedit,
 .view-user-delete,
 .view-project-addedit,
-.view-project-delete{
+.view-project-delete,
+.view-testcase-list{
     display: none;
 }

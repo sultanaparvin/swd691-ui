@@ -412,6 +412,70 @@ function projectDelete(id){
     $('.view-project-delete').slideUp();
     $('.view-project-list').slideDown()
 }
+
+/************************************************************************TESTCASES */
+//Init all the project functionalities and call various functions
+function initTestcases(){
+    testcaseProjectList();
+
+    
+    $(document).on('click','.testcase-project-view-button',function(){
+        var id = $(this).parents('tr').data('id');
+        testcasePopulateTestcaseList(id);
+        $('.view-project-list').slideUp();
+        $('.view-testcase-list').slideDown();
+    });
+}
+
+//Populate testcase project list view
+function testcaseProjectList(){
+    $.ajax({
+        url : endpoint+'?action=projects&subaction=getall',
+        method: 'GET'
+    }).done(function(response){
+        if(response != undefined){
+            response = JSON.parse(response);
+            if(response.success == true){
+                $('.project-list-table tbody').html('');
+                for(var i=0; i< response.items.length; i++){
+                    var item = response.items[i];
+                    var id = item.id;
+                    var name = item.name;
+                    var description = item.description;
+                    var row = '<tr data-id="'+id+'"><td>'+id+'</td><td>'+name+'</td><td>'+description+'</td><td><span class="btn btn-primary button testcase-project-view-button">View</span></td></tr>';
+                    $('.project-list-table tbody').append(row);
+                }
+            }
+        }
+    })
+}
+
+//Populate testcase list view by provided project ID
+function testcasePopulateTestcaseList(projectId){
+    $.ajax({
+        url : endpoint+'?action=testcases&subaction=getallbyprojectid&id='+projectId,
+        method: 'GET'
+    }).done(function(response){
+        console.log(response);
+        if(response != undefined){
+            response = JSON.parse(response);
+            if(response.success == true){
+                $('.testcase-list-table tbody').html('');
+                for(var i=0; i< response.items.length; i++){
+                    var item = response.items[i];
+                    var id = item.id;
+                    var name = item.name;
+                    var action = item.action;
+                    var status = item.status;
+                    var currentUserId = item.currentUserId;
+                    var row = '<tr data-id="'+id+'"><td>'+id+'</td><td>'+name+'</td><td>'+action+'</td><td>'+status+'</td><td>'+currentUserId+'</td><td><span class="btn btn-primary button testcase-edit-button">Edit</span></td><td><span class="btn btn-primary button testcase-delete-button">Delete</span></td></tr>';
+                    $('.testcase-list-table tbody').append(row);
+                }
+            }
+        }
+    })
+}
+
 /************************************************************************GLOBAL */
 //Show success and fail messages
 function ShowMessages(messages, type){
