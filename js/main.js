@@ -468,12 +468,34 @@ function testcasePopulateTestcaseList(projectId){
                     var action = item.action;
                     var status = item.status;
                     var currentUserId = item.currentUserId;
-                    var row = '<tr data-id="'+id+'"><td>'+id+'</td><td>'+name+'</td><td>'+action+'</td><td>'+status+'</td><td>'+currentUserId+'</td><td><span class="btn btn-primary button testcase-edit-button">Edit</span></td><td><span class="btn btn-primary button testcase-delete-button">Delete</span></td></tr>';
+                    testcaseUpdateCurrentUserCell(currentUserId);
+                    var row = '<tr data-id="'+id+'"><td>'+id+'</td><td>'+name+'</td><td>'+action+'</td><td>'+status+'</td><td class="current-user-cell" data-current-user-id="'+currentUserId+'">'+currentUserId+'</td><td><span class="btn btn-primary button testcase-edit-button">Edit</span></td><td><span class="btn btn-primary button testcase-delete-button">Delete</span></td></tr>';
                     $('.testcase-list-table tbody').append(row);
                 }
             }
         }
     })
+}
+
+//Updates the value of current user cell and replace the current user ID with the curren user name
+function testcaseUpdateCurrentUserCell(userId){
+    $.ajax({
+        url : endpoint+'?action=users&subaction=getbyid&id='+userId,
+        method: 'GET'
+    }).done(function(response){
+        if(response != undefined){
+            response = JSON.parse(response);
+            if(response.success == true){
+                var label = response.item.username +' ('+response.item.email+')';
+                $('.current-user-cell').each(function(){
+                    if($(this).data('current-user-id')==userId){
+                        $(this).html(label);
+                    }
+                })
+            }
+        }
+    });
+    // current-user-cell" data-current-user-id
 }
 
 /************************************************************************GLOBAL */
