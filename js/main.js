@@ -414,15 +414,32 @@ function projectDelete(id){
 }
 
 /************************************************************************TESTCASES */
-//Init all the project functionalities and call various functions
+//Init all the testcase functionalities and call various functions
 function initTestcases(){
+    testcasePopulateUserList();
     testcaseProjectList();
-
     
     $(document).on('click','.testcase-project-view-button',function(){
         var id = $(this).parents('tr').data('id');
         testcasePopulateTestcaseList(id);
         $('.view-project-list').slideUp();
+        $('.view-testcase-list').slideDown();
+    });
+    $(document).on('click','.testcase-add-button',function(){
+        $('.addedit-label').html('Add');
+        $('.view-testcase-list').slideUp();
+        $('.view-testcase-addedit').slideDown();
+    });
+    $(document).on('click','.testcase-edit-button',function(){
+    });
+    
+    $(document).on('click','.testcase-save-button',function(){ 
+        //This function is being used both for add & edit
+        testcaseSaveAddEditForm();
+    });
+    $(document).on('click','.testcase-back-button',function(){
+        testcaseResetForm();
+        $('.view-testcase-addedit').slideUp();
         $('.view-testcase-list').slideDown();
     });
 }
@@ -450,8 +467,28 @@ function testcaseProjectList(){
     })
 }
 
+//Populate users listbox
+function testcasePopulateUserList(){
+    $.ajax({
+        url : endpoint+'?action=users&subaction=getall',
+        method: 'GET'
+    }).done(function(response){
+        if(response != undefined){
+            response = JSON.parse(response);
+            if(response.success == true){
+                $('.field-testcase-currentUserId').html('');
+                for(var i=0; i< response.items.length; i++){
+                    var item = response.items[i];
+                    $('.field-testcase-currentUserId').append('<option value="'+item.id+'">'+item.name+' ('+item.privilege+')</option>');
+                }
+            }
+        }
+    })
+}
+
 //Populate testcase list view by provided project ID
 function testcasePopulateTestcaseList(projectId){
+    $('.field-project-id').val(projectId);
     $.ajax({
         url : endpoint+'?action=testcases&subaction=getallbyprojectid&id='+projectId,
         method: 'GET'
@@ -469,7 +506,12 @@ function testcasePopulateTestcaseList(projectId){
                     var status = item.status;
                     var currentUserId = item.currentUserId;
                     testcaseUpdateCurrentUserCell(currentUserId);
-                    var row = '<tr data-id="'+id+'"><td>'+id+'</td><td>'+name+'</td><td>'+action+'</td><td>'+status+'</td><td class="current-user-cell" data-current-user-id="'+currentUserId+'">'+currentUserId+'</td><td><span class="btn btn-primary button testcase-edit-button">Edit</span></td><td><span class="btn btn-primary button testcase-delete-button">Delete</span></td></tr>';
+                    if(currentLoggedInUser.privilege == 'Developer'){
+                        var hideForDeveloper = 'hidden';
+                    }else{
+                        var hideForDeveloper = '';
+                    }
+                    var row = '<tr data-id="'+id+'"><td>'+id+'</td><td>'+name+'</td><td>'+action+'</td><td>'+status+'</td><td class="current-user-cell" data-current-user-id="'+currentUserId+'">'+currentUserId+'</td><td><span class="btn btn-primary button testcase-edit-button">Edit</span></td><td class="'+hideForDeveloper+'"><span class="btn btn-primary button testcase-delete-button">Delete</span></td></tr>';
                     $('.testcase-list-table tbody').append(row);
                 }
             }
@@ -495,7 +537,92 @@ function testcaseUpdateCurrentUserCell(userId){
             }
         }
     });
-    // current-user-cell" data-current-user-id
+}
+
+//reset the value of all form fields on testcase form
+function testcaseResetForm(){
+    $('.field-testcase-id').val('');
+    $('.field-project-id').val('');
+    $('.field-testcase-name').val('');
+    $('.field-testcase-action').val('');
+    $('.field-testcase-expectedResult').val('');
+    $('.field-testcase-actualResult').val('');
+    $('.field-testcase-status').val('');
+    $('.field-testcase-comment').val('');
+}
+
+//Handle testcase form save
+function testcaseSaveAddEditForm(){
+    var action = 'testcases';
+    var id = $('.field-testcase-id').val();
+    var name = $('.field-testcase-name').val();
+    var actionname = $('.field-testcase-action').val();
+    var expectedResult = $('.field-testcase-expectedResult').val();
+    var actualResult = $('.field-testcase-actualResult').val();
+    var status = $('.field-testcase-status').val();
+    var currentUserId = $('.field-testcase-currentUserId').val();
+    var projectId = $('.field-project-id').val();
+    var comment = $('.field-testcase-comment').val();
+    if(id != '' && id!=undefined && id!=null){
+        var subaction = 'edit';
+    }else{
+        var subaction = 'add';
+    }
+    //Save the data
+    $.ajax({
+        url : endpoint,
+        method: 'POST',
+        data: {
+            'action': action,
+            'subaction' : subaction,
+            'id' : id,
+            'name' : name,
+            'actionname': actionname,
+            'expectedResult': expectedResult,
+            'actualResult': actualResult,
+            'status': status,
+            'currentUserId': currentUserId,
+            'projectId': projectId,
+        }
+    }).done(function(response){
+        if(response != undefined){
+            response = JSON.parse(response);
+            if(response.success == true){
+                addComment(response.id,currentLoggedInUser.id,comment);
+                var messages = [response.message];
+                ShowMessages(messages, 'success');
+                testcaseResetForm();
+                testcasePopulateTestcaseList(projectId);
+                $('.view-testcase-addedit').slideUp();
+                $('.view-testcase-list').slideDown();
+            }else{
+                ShowMessages(response.message, 'fail');
+            }
+        }
+    });
+}
+
+//Add new comments
+function addComment(testCaseId , currentLoggedInUserId, comment){
+    $.ajax({
+        url : endpoint,
+        method: 'POST',
+        data: {
+            'action': 'comments',
+            'subaction' : 'add',
+            'userId' : currentLoggedInUserId,
+            'comment' : comment,
+            'testcaseId': testCaseId,
+        }
+    }).done(function(response){
+        if(response != undefined){
+            response = JSON.parse(response);
+            if(response.success == true){
+            }else{
+                ShowMessages(response.message, 'fail');
+            }
+        }
+    });
 }
 
 /************************************************************************GLOBAL */

@@ -118,6 +118,11 @@ footer{
 .view-user-delete,
 .view-project-addedit,
 .view-project-delete,
-.view-testcase-list{
+.view-testcase-list,
+.view-testcase-addedit,
+.view-testcase-delete{
+    display: none;
+}
+.hidden{
     display: none;
 }
