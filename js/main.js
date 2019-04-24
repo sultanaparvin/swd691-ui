@@ -431,6 +431,13 @@ function initTestcases(){
         $('.view-testcase-addedit').slideDown();
     });
     $(document).on('click','.testcase-edit-button',function(){
+        $('.addedit-label').html('Edit');
+        //Get the item id 
+        var id = $(this).parents('tr').data('id');
+        testcasePopulateEditFormById(id);
+        $('.field-testcase-id').val(id);
+        $('.view-testcase-list').slideUp();
+        $('.view-testcase-addedit').slideDown();
     });
     
     $(document).on('click','.testcase-save-button',function(){ 
@@ -556,6 +563,33 @@ function testcaseUpdateCurrentUserCell(userId){
     });
 }
 
+//Populates testcase edit form
+function testcasePopulateEditFormById(id){
+    if(currentLoggedInUser.privilege == 'Developer'){
+        $('.field-testcase-name').attr('disabled',true);
+        $('.field-testcase-action').attr('disabled',true);
+        $('.field-testcase-expectedResult').attr('disabled',true);
+        $('.field-testcase-actualResult').attr('disabled',true);
+    }
+    $.ajax({
+        url : endpoint+'?action=testcases&subaction=getbyid&id='+id,
+        method: 'GET'
+    }).done(function(response){
+        if(response != undefined){
+            response = JSON.parse(response);
+            if(response.success == true){
+                $('.field-testcase-id').val(response.item.id);
+                $('.field-testcase-name').val(response.item.name);
+                $('.field-testcase-action').val(response.item.action);
+                $('.field-testcase-expectedResult').val(response.item.expectedResult);
+                $('.field-testcase-actualResult').val(response.item.actualResult);
+                $('.field-testcase-status').val(response.item.status);
+                $('.field-testcase-currentUserId').val(response.item.currentUserId);
+            }
+        }
+    })
+}
+
 //reset the value of all form fields on testcase form
 function testcaseResetForm(){
     $('.field-testcase-id').val('');
@@ -604,7 +638,12 @@ function testcaseSaveAddEditForm(){
         if(response != undefined){
             response = JSON.parse(response);
             if(response.success == true){
-                addComment(response.id,currentLoggedInUser.id,comment);
+                if(action === 'add'){
+                    var testCaseId = response.id;
+                }else{
+                    var testCaseId = id;
+                }
+                addComment(testCaseId,currentLoggedInUser.id,comment);
                 var messages = [response.message];
                 ShowMessages(messages, 'success');
                 testcaseResetForm();
