@@ -3,7 +3,7 @@
 ?>
     <div class="row">
         <div class="col col-xs-12">
-            <input type="hidden" class="field-testcase-id" id="field-project-id" value=""> 
+            <input type="hidden" class="field-testcase-id" id="field-testcase-id" value=""> 
             <input type="hidden" class="field-project-id" id="field-project-id" value=""> 
             <div class="messages-wrap mb-2 w-100"></div>
             <div class="card w-100 view-project-list">
@@ -93,10 +93,10 @@
             </div>
             <div class="card w-100 view-testcase-delete">
                 <div class="card-header">
-                    Delete User
+                    Delete Testcase
                 </div>
                 <div class="card-body">
-                    Are you sure you want to delete this user?<br>
+                    Are you sure you want to delete this testcase?<br>
                     <span class="btn btn-primary button testcase-delete-yes-button mt-2 mb-2">Yes</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <span class="btn btn-primary button testcase-delete-no-button mt-2 mb-2">No</span>
                 </div>

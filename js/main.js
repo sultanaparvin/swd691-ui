@@ -442,6 +442,23 @@ function initTestcases(){
         $('.view-testcase-addedit').slideUp();
         $('.view-testcase-list').slideDown();
     });
+    
+    $(document).on('click','.testcase-delete-button',function(){
+        //Get the item id 
+        var id = $(this).parents('tr').data('id');
+        $('.field-testcase-id').val(id);
+        $('.view-testcase-list').slideUp();
+        $('.view-testcase-delete').slideDown();
+    });
+    $(document).on('click','.testcase-delete-yes-button',function(){
+        var id = $('.field-testcase-id').val();
+        testcaseDelete(id);
+    });
+    $(document).on('click','.testcase-delete-no-button',function(){
+        testcaseResetForm();
+        $('.view-testcase-delete').slideUp();
+        $('.view-testcase-list').slideDown();
+    });
 }
 
 //Populate testcase project list view
@@ -542,7 +559,6 @@ function testcaseUpdateCurrentUserCell(userId){
 //reset the value of all form fields on testcase form
 function testcaseResetForm(){
     $('.field-testcase-id').val('');
-    $('.field-project-id').val('');
     $('.field-testcase-name').val('');
     $('.field-testcase-action').val('');
     $('.field-testcase-expectedResult').val('');
@@ -623,6 +639,34 @@ function addComment(testCaseId , currentLoggedInUserId, comment){
             }
         }
     });
+}
+
+//delete testcase by id
+function testcaseDelete(id){
+    $.ajax({
+        url : endpoint,
+        method: 'POST',
+        data: {
+            'action': 'testcases',
+            'subaction' : 'delete',
+            'id' : id,
+        }
+    }).done(function(response){
+        if(response != undefined){
+            response = JSON.parse(response);
+            if(response.success == true){
+                var projectId = $('.field-project-id').val();
+                var messages = [response.message];
+                ShowMessages(messages, 'success');
+                testcaseResetForm();
+                testcasePopulateTestcaseList(projectId);
+            }else{
+                ShowMessages(response.message, 'fail');
+            }
+        }
+    });
+    $('.view-testcase-delete').slideUp();
+    $('.view-testcase-list').slideDown()
 }
 
 /************************************************************************GLOBAL */
