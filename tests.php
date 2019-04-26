@@ -91,6 +91,14 @@
                     <span class="btn btn-primary button testcase-back-button mt-2 mb-2">Back</span>
                 </div>
             </div>
+            <div class="card w-100 view-testcase-comments mt-2">
+                <div class="card-header">
+                    Comments
+                </div>
+                <div class="card-body">
+                    <div class="comments-list"></div>
+                </div>
+            </div>
             <div class="card w-100 view-testcase-delete">
                 <div class="card-header">
                     Delete Testcase

@@ -435,6 +435,7 @@ function initTestcases(){
         //Get the item id 
         var id = $(this).parents('tr').data('id');
         testcasePopulateEditFormById(id);
+        testcaseShowCommentsByTestcaseId(id);
         $('.field-testcase-id').val(id);
         $('.view-testcase-list').slideUp();
         $('.view-testcase-addedit').slideDown();
@@ -448,6 +449,7 @@ function initTestcases(){
         testcaseResetForm();
         $('.view-testcase-addedit').slideUp();
         $('.view-testcase-list').slideDown();
+        $('.view-testcase-comments').fadeOut();
     });
     
     $(document).on('click','.testcase-delete-button',function(){
@@ -649,6 +651,7 @@ function testcaseSaveAddEditForm(){
                 testcaseResetForm();
                 testcasePopulateTestcaseList(projectId);
                 $('.view-testcase-addedit').slideUp();
+                $('.view-testcase-comments').fadeOut();
                 $('.view-testcase-list').slideDown();
             }else{
                 ShowMessages(response.message, 'fail');
@@ -706,6 +709,55 @@ function testcaseDelete(id){
     });
     $('.view-testcase-delete').slideUp();
     $('.view-testcase-list').slideDown()
+}
+
+//Show all comments by testcase id
+function testcaseShowCommentsByTestcaseId(testcaseId){
+    $.ajax({
+        url : endpoint+'?action=comments&subaction=getallbytestcaseid&id='+testcaseId,
+        method: 'GET'
+    }).done(function(response){
+        // console.log(response);
+        if(response != undefined){
+            response = JSON.parse(response);
+            if(response.success == true){
+                $('.comments-list').html('');
+                for(var i=0; i< response.items.length; i++){
+                    var item = response.items[i];
+                    var userId = item.userId;
+                    var comment = item.comment;
+                    var date = item.date;
+                    testcaseCommentUpdateCurrentUserCell(userId);
+                    var commentElement = '<div class="comment"><div class="comment-user-cell" data-comment-user-id="'+userId+'">'+userId+'</div><div class="comment-date">'+date+'</div><div class="comment-text">'+comment+'</div>';
+                    $('.comments-list').append(commentElement);
+                }
+            }
+        }
+    })
+    $('.view-testcase-comments').fadeIn();
+}
+
+//Updates the value of current user cell and replace the current user ID with the current user name for comments
+function testcaseCommentUpdateCurrentUserCell(userId){
+    $.ajax({
+        url : endpoint+'?action=users&subaction=getbyid&id='+userId,
+        method: 'GET'
+    }).done(function(response){
+        if(response != undefined){
+            response = JSON.parse(response);
+            if(response.success == true){
+                var label = response.item.name ;
+                $('.comment-user-cell').each(function(){
+                    if($(this).data('comment-user-id')==userId){
+                        var name = response.item.name;
+                        var initial = response.item.name.substring(0,1);
+                        var out = '<div class="comment-author-initial">'+initial+'</div><div class="comment-author-name">'+name+'</div>';
+                        $(this).html(out);
+                    }
+                })
+            }
+        }
+    });
 }
 
 /************************************************************************GLOBAL */

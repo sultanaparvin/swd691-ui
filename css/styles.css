@@ -120,9 +120,53 @@ footer{
 .view-project-delete,
 .view-testcase-list,
 .view-testcase-addedit,
-.view-testcase-delete{
+.view-testcase-delete,
+.view-testcase-comments{
     display: none;
 }
 .hidden{
     display: none;
+}
+.comment{
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+}
+.comment-user-cell{
+    clear: both;
+    display: block;
+    width: 100%;
+    overflow: hidden;
+}
+.comment-author-initial{
+    width: 50px;
+    height: 50px;
+    display: block;
+    float: left;
+    border-radius: 100%;
+    border: 1px solid #9b020e;
+    font-size: 25px;
+    line-height: 40px;
+    padding: 4px;
+    text-align: center;
+    color: #9b020e;
+}
+.comment-author-name{
+    display: inline-block;
+    float: left;
+    margin-left: 10px;
+    font-size: 13px;
+    font-weight: 700;
+}
+.comment-date{
+    font-size: 10px;
+    color: #737272;
+    margin-top: -29px;
+    margin-left: 60px;
+}
+.comment-text{
+    margin-left: 60px;
+    margin-top: 4px;
+    font-size: 13px;
+    color: #333;
 }
