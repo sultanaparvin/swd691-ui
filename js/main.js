@@ -1,4 +1,8 @@
-var endpoint = 'http://localhost/swd691-service-layers/';
+//Local Endpoint
+//var endpoint = 'http://localhost/swd691-service-layers/';
+//Production Endpoint
+var endpoint = 'http://www.testcase.website/api/';
+
 var currentLoggedInUser = '';
 /************************************************************************LOGIN/LOGOUT */
 //Init login/logout functionalities
@@ -39,7 +43,7 @@ function initLogout(){
         if(response != undefined){
             response = JSON.parse(response);
             if(response.success == true){
-                redirect('index.php');
+                redirect('');
             }else{
                 ShowMessages(response.message, 'fail');
             }
