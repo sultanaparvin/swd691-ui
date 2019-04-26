@@ -150,8 +150,8 @@ function userSaveAddEditForm(){
     }else{
         var subaction = 'add';
     }
-    console.log(id);
-    console.log(subaction);
+    // console.log(id);
+    // console.log(subaction);
     var data= {
         'action': action,
         'subaction' : subaction,
@@ -162,7 +162,7 @@ function userSaveAddEditForm(){
         'email': email,
         'privilege': privilege
     };
-    console.log(data);
+    // console.log(data);
     //Save the data
     $.ajax({
         url : endpoint,
@@ -519,7 +519,7 @@ function testcasePopulateTestcaseList(projectId){
         url : endpoint+'?action=testcases&subaction=getallbyprojectid&id='+projectId,
         method: 'GET'
     }).done(function(response){
-        console.log(response);
+        // console.log(response);
         if(response != undefined){
             response = JSON.parse(response);
             if(response.success == true){
