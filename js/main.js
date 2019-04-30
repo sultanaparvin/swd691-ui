@@ -1,7 +1,7 @@
 //Local Endpoint
-//var endpoint = 'http://localhost/swd691-service-layers/';
+var endpoint = 'http://localhost/swd691-service-layers/';
 //Production Endpoint
-var endpoint = 'http://www.testcase.website/api/';
+//var endpoint = 'http://www.testcase.website/api/';
 
 var currentLoggedInUser = '';
 /************************************************************************LOGIN/LOGOUT */
@@ -788,12 +788,7 @@ function ShowMessages(messages, type){
 //Redirect the user to a new page
 function redirect(destination){
     var origin = window.location.origin; //Domain
-    var hrefArray = window.location.href.split('/');
-    if(hrefArray['3']!=''){
-        var domain = origin+'/'+hrefArray['3'];
-    }else{
-        var domain = origin;
-    }
+    var domain = origin;
     window.location.replace(domain+'/'+destination);
 }
 
